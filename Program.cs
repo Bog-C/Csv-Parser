@@ -27,7 +27,7 @@ public class Program
         stopwatch.Stop();
         
         Console.WriteLine();
-        Console.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Elapsed time CsvHelper: {stopwatch.ElapsedMilliseconds} ms");
         Console.WriteLine();
 
 
@@ -36,7 +36,7 @@ public class Program
         stopwatch.Stop();
 
         Console.WriteLine();
-        Console.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Elapsed time Sep: {stopwatch.ElapsedMilliseconds} ms");
         Console.WriteLine();
 
 
@@ -45,7 +45,7 @@ public class Program
         stopwatch.Stop();
 
         Console.WriteLine();
-        Console.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine($"Elapsed time RecordParser: {stopwatch.ElapsedMilliseconds} ms");
         Console.WriteLine();
 
         //GenerateDummyData(filePathForCsvHelper, 10000);
