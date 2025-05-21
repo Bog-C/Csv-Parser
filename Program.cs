@@ -37,6 +37,7 @@ public class Program
 
         stopwatch.Restart();
         SepParse(filePathForSep); // Sep
+        //SepParseWithLogging(filePathForSep); // Sep with logging
         stopwatch.Stop();
 
         Console.WriteLine();
@@ -67,8 +68,6 @@ public class Program
     private static List<StandardExcelRow> SoftCircuitsParser(string filePath)
     {
         List<StandardExcelRow> results = new();
-
-        //using SoftCircuits.CsvParser.CsvReader<StandardExcelRow> reader = new(filePath);
 
         using (CsvReader<StandardExcelRow> reader = new(filePath))
         {
@@ -206,7 +205,7 @@ public class Program
         using var reader = Sep.Reader(o => o with { Unescape = true }).FromFile(filePath);
 
         var result = new List<StandardExcelRow>();
-        
+
 
         foreach (var readRow in reader)
         {
@@ -218,7 +217,53 @@ public class Program
         return result;
     }
 
-    
+    private static void SepParseWithLogging(string filePath)
+    {
+        using var reader = Sep.Reader(o => o with { Unescape = true }).FromFile(filePath);
+
+        var batch = new List<StandardExcelRow>();
+        decimal batchTotal = 0;
+
+        var batchIndex = 1;
+
+        foreach (var readRow in reader)
+        {
+            if (readRow.RowIndex == 1000)
+                break;
+
+            if (string.IsNullOrEmpty(readRow[1].ToString()))
+            {
+                var t = readRow[11].ToString();
+                if (decimal.TryParse(t, out decimal total) && batchTotal == total)
+                {
+                    Console.WriteLine();
+                    Console.Write($"TOTAL: {readRow[11].ToString()} ");
+                    Console.WriteLine();
+                }
+
+                batchTotal = 0;
+                total = 0;
+
+                continue;
+            }
+            else if (readRow[1].ToString() == "1")
+            {
+                Console.WriteLine();
+                Console.Write($"BATCH  {batchIndex}:");
+                Console.WriteLine();
+                batchIndex++;
+            }
+
+            var detail = MapRow(readRow);
+            ConsoleWriteLine(detail);
+
+            batchTotal += decimal.Parse(detail.Amount);
+
+            Console.WriteLine();
+        }
+    }
+
+
 
     private static StandardExcelRow MapRow(SepReader.Row row)
     {
