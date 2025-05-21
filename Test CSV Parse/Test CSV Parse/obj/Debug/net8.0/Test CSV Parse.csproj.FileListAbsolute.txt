@@ -1,0 +1,19 @@
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\bin\Debug\net8.0\Test CSV Parse.exe
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\bin\Debug\net8.0\Test CSV Parse.deps.json
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\bin\Debug\net8.0\Test CSV Parse.runtimeconfig.json
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\bin\Debug\net8.0\Test CSV Parse.dll
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\bin\Debug\net8.0\Test CSV Parse.pdb
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\bin\Debug\net8.0\csFastFloat.dll
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\bin\Debug\net8.0\Sep.dll
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\Test CSV Parse.csproj.AssemblyReference.cache
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\Test CSV Parse.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\Test CSV Parse.AssemblyInfoInputs.cache
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\Test CSV Parse.AssemblyInfo.cs
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\Test CSV Parse.csproj.CoreCompileInputs.cache
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\Test CSV.9938ACE2.Up2Date
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\Test CSV Parse.dll
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\refint\Test CSV Parse.dll
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\Test CSV Parse.pdb
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\Test CSV Parse.genruntimeconfig.cache
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\obj\Debug\net8.0\ref\Test CSV Parse.dll
+C:\Users\e6001366\source\repos\Test CSV Parse\Test CSV Parse\bin\Debug\net8.0\CsvHelper.dll

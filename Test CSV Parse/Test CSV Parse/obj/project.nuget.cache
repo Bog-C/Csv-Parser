@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "XISD8pytOgE=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\e6001366\\source\\repos\\Test CSV Parse\\Test CSV Parse\\Test CSV Parse.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\e6001366\\.nuget\\packages\\csfastfloat\\4.1.5\\csfastfloat.4.1.5.nupkg.sha512",
+    "C:\\Users\\e6001366\\.nuget\\packages\\csvhelper\\33.0.1\\csvhelper.33.0.1.nupkg.sha512",
+    "C:\\Users\\e6001366\\.nuget\\packages\\sep\\0.10.1\\sep.0.10.1.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,75 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Test CSV Parse/1.0.0": {
+        "dependencies": {
+          "CsvHelper": "33.0.1",
+          "Sep": "0.10.1"
+        },
+        "runtime": {
+          "Test CSV Parse.dll": {}
+        }
+      },
+      "csFastFloat/4.1.5": {
+        "runtime": {
+          "lib/net8.0/csFastFloat.dll": {
+            "assemblyVersion": "4.1.5.0",
+            "fileVersion": "4.1.5.0"
+          }
+        }
+      },
+      "CsvHelper/33.0.1": {
+        "runtime": {
+          "lib/net8.0/CsvHelper.dll": {
+            "assemblyVersion": "33.0.0.0",
+            "fileVersion": "33.0.1.24"
+          }
+        }
+      },
+      "Sep/0.10.1": {
+        "dependencies": {
+          "csFastFloat": "4.1.5"
+        },
+        "runtime": {
+          "lib/net8.0/Sep.dll": {
+            "assemblyVersion": "0.10.0.0",
+            "fileVersion": "0.10.1.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Test CSV Parse/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "csFastFloat/4.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TugPHQzrbr2iruO8lshMekUXoFIyBOZQLqNCwQF6BHv4FE6mBeMa41pj5cXW6FKlk9uHypIAAy4UmTFivWFjPA==",
+      "path": "csfastfloat/4.1.5",
+      "hashPath": "csfastfloat.4.1.5.nupkg.sha512"
+    },
+    "CsvHelper/33.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fev4lynklAU2A9GVMLtwarkwaanjSYB4wUqO2nOJX5hnzObORzUqVLe+bDYCUyIIRQM4o5Bsq3CcyJR89iMmEQ==",
+      "path": "csvhelper/33.0.1",
+      "hashPath": "csvhelper.33.0.1.nupkg.sha512"
+    },
+    "Sep/0.10.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-N9CtEnONRgyfmaBrNFPywKEs/bOK6TLNKQ4RsGYMGYDdoMiXsfYbtKW8szbzEBrRcdIQtaGmZtHT+9p8Y9IMvw==",
+      "path": "sep/0.10.1",
+      "hashPath": "sep.0.10.1.nupkg.sha512"
+    }
+  }
+}
