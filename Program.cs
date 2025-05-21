@@ -10,7 +10,11 @@ using RecordParser.Builders.Reader;
 using RecordParser.Extensions;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using SoftCircuits.CsvParser;
 using Transaction = Test_CSV_Parse.Transaction;
+using CsvWriter = CsvHelper.CsvWriter;
+using System;
 
 public class Program
 {
@@ -48,10 +52,41 @@ public class Program
         Console.WriteLine($"Elapsed time RecordParser: {stopwatch.ElapsedMilliseconds} ms");
         Console.WriteLine();
 
+
+        stopwatch.Restart();
+        SoftCircuitsParser(filePathForRecordParser); // SoftCircuits
+        stopwatch.Stop();
+
+        Console.WriteLine();
+        Console.WriteLine($"Elapsed time SoftCircuits: {stopwatch.ElapsedMilliseconds} ms");
+        Console.WriteLine();
+
         //GenerateDummyData(filePathForCsvHelper, 10000);
     }
 
-    
+    private static List<StandardExcelRow> SoftCircuitsParser(string filePath)
+    {
+        List<StandardExcelRow> results = new();
+
+        //using SoftCircuits.CsvParser.CsvReader<StandardExcelRow> reader = new(filePath);
+
+        using (CsvReader<StandardExcelRow> reader = new(filePath))
+        {
+            // Read header and use to determine column order
+            reader.ReadHeaders(true);
+            // Read data
+            StandardExcelRow? row;
+            while ((row = reader.Read()) != null)
+                results.Add(row);
+        }
+
+        return results;
+
+        //while (reader.Read())
+        //Console.WriteLine(string.Join(", ", reader.Columns));
+    }
+
+
     private static List<StandardExcelRow> RecordParser(string filePath)
     {
         using TextReader textReader = new StreamReader(filePath);
@@ -116,7 +151,7 @@ public class Program
         };
 
         using var reader = new StreamReader(filePath);
-        using var csv = new CsvReader(reader, config);
+        using var csv = new CsvHelper.CsvReader(reader, config);
 
         // Read header to get expected field count
         csv.Read();
