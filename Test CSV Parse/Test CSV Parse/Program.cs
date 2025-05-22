@@ -16,6 +16,7 @@ using Transaction = Test_CSV_Parse.Transaction;
 using CsvWriter = CsvHelper.CsvWriter;
 using System;
 using BenchmarkDotNet.Running;
+using CommandLine;
 
 namespace Test_CSV_Parse
 {
@@ -27,7 +28,8 @@ namespace Test_CSV_Parse
             //BenchmarkRunner.Run<Benchmark>();
             #endregion benchmark
 
-            string filePathForSep = "Cashflow Settlement Report for Sep - 1k lines.csv";
+            //string filePathForSep = "Cashflow Settlement Report for Sep - 1k lines.csv";
+            string filePathForSep = "New Cashflow Settlement Report Sample.csv";
             //string filePathForCsvHelper = "Cashflow Settlement Report for CsvHelper.csv";
             //string filePathForRecordParser = "Cashflow Settlement Report for RecordParser.csv";
 
@@ -82,6 +84,11 @@ namespace Test_CSV_Parse
 
         #region sep methods
 
+        private static StandardExcelRow Add(StandardExcelRow x, int y)
+        {
+            return x;
+        }
+
         private static void SepParseWithLoggingV3(string filePath)
         {
             using var reader = Sep.Reader(o => o with { Unescape = true }).FromFile(filePath);
@@ -92,9 +99,15 @@ namespace Test_CSV_Parse
 
             var batchIndex = 1;
 
-            foreach (var readRow in reader)
+            var results = reader.ParallelEnumerate(row => MapRow(row), 2)
+                .AsParallel().AsOrdered()
+                .Select(x => x) 
+                .ToList();
+
+            //foreach (var readRow in reader)
+            foreach (var row in results)
             {
-                var row = MapRow(readRow);
+                //var row = MapRow(readRow);
                 //result.Add(row);
 
                 if (!row.DetailNo.HasValue)
@@ -131,6 +144,23 @@ namespace Test_CSV_Parse
             }
         }
 
+        private IEnumerable<IGrouping<int, StandardExcelRow>> Parse(SepReader reader, Func<StandardExcelRow, bool> isTotalRow)
+        {
+            foreach (var readRow in reader)
+            {
+                var accumulator = new List<StandardExcelRow>();
+                var row = MapRow(readRow); // implemented with TryParse<T> !!!
+                if (!isTotalRow(row))
+                {
+                    accumulator.Add(row);
+                }
+                else
+                {
+                    yield return new Grouping<int, StandardExcelRow>(row.Amount, accumulator);
+                }
+            }
+        }
+
         private static void SepParseWithLoggingV2(string filePath)
         {
             using var reader = Sep.Reader(o => o with { Unescape = true }).FromFile(filePath);
@@ -141,7 +171,7 @@ namespace Test_CSV_Parse
 
             foreach (var readRow in reader)
             {
-                if (readRow[1].Span.IsEmpty)
+                if (!readRow[1].TryParse<int>(out int val))
                 {
                     var total = readRow[11].Parse<decimal>();
                     if (batchTotal == total)
@@ -248,10 +278,10 @@ namespace Test_CSV_Parse
                 Rate = row["Rate"].TryParse<decimal>(out var rate) ? rate : null,
                 PaymentDirection = row["Payment Direction"].ToString(),
                 DealType = row["Deal Type"].ToString(),
-                RBSReceiptDate = row["RBS Receipt Date"].TryParse<DateOnly>(),
-                SubmittedCashflowID = row["Submitted Cashflow ID"].ToString(),
+                RBSReceiptDate = row["NatWest Receipt Date"].TryParse<DateOnly>(),
+                //SubmittedCashflowID = row["Submitted Cashflow ID"].ToString(),
                 Submitted = row["Submitted"].TryParse<DateTime>(),
-                RBSPaymentRef = row["RBS Payment Ref"].ToString()
+                RBSPaymentRef = row["NatWest Internal Booking Ref"].ToString()
             };
         }
 
@@ -383,10 +413,10 @@ namespace Test_CSV_Parse
                     Rate = csv.GetField<decimal>("Rate"),
                     PaymentDirection = csv.GetField("Payment Direction"),
                     DealType = csv.GetField("Deal Type"),
-                    RBSReceiptDate = csv.GetField<DateOnly>("RBS Receipt Date"),
-                    SubmittedCashflowID = csv.GetField("Submitted Cashflow ID"),
+                    RBSReceiptDate = csv.GetField<DateOnly>("NatWest Receipt Date"),
+                    //SubmittedCashflowID = csv.GetField("Submitted Cashflow ID"),
                     Submitted = csv.GetField<DateTime>("Submitted"),
-                    RBSPaymentRef = csv.GetField("RBS Payment Ref")
+                    RBSPaymentRef = csv.GetField("NatWest Internal Booking Ref")
                 };
                 result.Add(row);
                 //ConsoleWriteLine(row);
