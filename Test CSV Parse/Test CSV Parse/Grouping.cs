@@ -1,4 +1,6 @@
-﻿public class Grouping<TKey, TElement> : IGrouping<TKey, TElement>
+﻿using System.Collections;
+
+public class Grouping<TKey, TElement> : IGrouping<TKey, TElement>
 {
     private readonly TKey key;
     private readonly IEnumerable<TElement> values;

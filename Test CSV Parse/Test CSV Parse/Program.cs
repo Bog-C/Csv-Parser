@@ -33,21 +33,34 @@ namespace Test_CSV_Parse
             //string filePathForCsvHelper = "Cashflow Settlement Report for CsvHelper.csv";
             //string filePathForRecordParser = "Cashflow Settlement Report for RecordParser.csv";
 
+            using var reader = Sep.Reader(o => o with { Unescape = true }).FromFile(filePathForSep);
+
+            var result = Parse(reader, row => !row.DetailNo.HasValue).ToList();
+
+            foreach (var group in result)
+            {
+                Console.WriteLine($"TOTAL: {group.Key} ");
+                foreach (var item in group)
+                {
+                    ConsoleWriteLine(item);
+                }
+            }
+
             #region test sep different versions of parse methods
 
-            Stopwatch stopwatch = new Stopwatch();
+            //Stopwatch stopwatch = new Stopwatch();
 
-            stopwatch.Start();
-            //SepParse(filePathForSep); // Sep
+            //stopwatch.Start();
+            ////SepParse(filePathForSep); // Sep
 
-            //SepParseWithLoggingV1(filePathForSep); 
-            //SepParseWithLoggingV2(filePathForSep);
-            SepParseWithLoggingV3(filePathForSep); // Sep with logging
-            stopwatch.Stop();
+            ////SepParseWithLoggingV1(filePathForSep); 
+            ////SepParseWithLoggingV2(filePathForSep);
+            //SepParseWithLoggingV3(filePathForSep); // Sep with logging
+            //stopwatch.Stop();
 
-            Console.WriteLine();
-            Console.WriteLine($"Elapsed time Sep v3: {stopwatch.ElapsedMilliseconds} ms");
-            Console.WriteLine();
+            //Console.WriteLine();
+            //Console.WriteLine($"Elapsed time Sep v3: {stopwatch.ElapsedMilliseconds} ms");
+            //Console.WriteLine();
 
             #endregion test sep different versions of parse methods
 
@@ -82,34 +95,51 @@ namespace Test_CSV_Parse
             ////GenerateDummyData(filePathForCsvHelper, 10000);
         }
 
-        #region sep methods
-
-        private static StandardExcelRow Add(StandardExcelRow x, int y)
+        private static IEnumerable<IGrouping<decimal, StandardExcelRow>> Parse(SepReader reader, Func<StandardExcelRow, bool> isTotalRow)
         {
-            return x;
+            decimal totalAmount = 0;
+            var accumulator = new List<StandardExcelRow>();
+
+            foreach (var readRow in reader)
+            {
+                
+                var row = MapRow(readRow); // implemented with TryParse<T> !!!
+
+                if (!isTotalRow(row))
+                {
+                    totalAmount += row.Amount;
+
+                    accumulator.Add(row);
+                }
+                else
+                {
+
+                    if (totalAmount == row.Amount && accumulator.Count > 0)
+                    {
+                        yield return new Grouping<decimal, StandardExcelRow>(row.Amount, accumulator.ToList());
+                    }
+
+                    totalAmount = 0;
+                    accumulator.Clear();
+                }
+            }
         }
+
+
+        #region sep methods
 
         private static void SepParseWithLoggingV3(string filePath)
         {
             using var reader = Sep.Reader(o => o with { Unescape = true }).FromFile(filePath);
 
-            //var result = new List<StandardExcelRow>();
-
             decimal batchTotal = 0;
 
             var batchIndex = 1;
 
-            var results = reader.ParallelEnumerate(row => MapRow(row), 2)
-                .AsParallel().AsOrdered()
-                .Select(x => x) 
-                .ToList();
-
-            //foreach (var readRow in reader)
-            foreach (var row in results)
+            foreach (var readRow in reader)
             {
-                //var row = MapRow(readRow);
-                //result.Add(row);
-
+                var row = MapRow(readRow);
+                
                 if (!row.DetailNo.HasValue)
                 {
                     var total = row.Amount;
@@ -141,23 +171,6 @@ namespace Test_CSV_Parse
 
                 batchTotal += row.Amount;
                 //ConsoleWriteLine(row);
-            }
-        }
-
-        private IEnumerable<IGrouping<int, StandardExcelRow>> Parse(SepReader reader, Func<StandardExcelRow, bool> isTotalRow)
-        {
-            foreach (var readRow in reader)
-            {
-                var accumulator = new List<StandardExcelRow>();
-                var row = MapRow(readRow); // implemented with TryParse<T> !!!
-                if (!isTotalRow(row))
-                {
-                    accumulator.Add(row);
-                }
-                else
-                {
-                    yield return new Grouping<int, StandardExcelRow>(row.Amount, accumulator);
-                }
             }
         }
 
