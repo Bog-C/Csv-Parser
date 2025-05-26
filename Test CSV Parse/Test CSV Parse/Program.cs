@@ -1,9 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-//using nietras.SeparatedValues;
-
-//Console.WriteLine("Hello, World!");
-
-using CsvHelper;
+﻿using CsvHelper;
 using CsvHelper.Configuration;
 using nietras.SeparatedValues;
 using RecordParser.Builders.Reader;
@@ -24,14 +19,7 @@ namespace Test_CSV_Parse
     {
         public static void Main()
         {
-            #region benchmark
-            //BenchmarkRunner.Run<Benchmark>();
-            #endregion benchmark
-
-            //string filePathForSep = "Cashflow Settlement Report for Sep - 1k lines.csv";
             string filePathForSep = "New Cashflow Settlement Report Sample.csv";
-            //string filePathForCsvHelper = "Cashflow Settlement Report for CsvHelper.csv";
-            //string filePathForRecordParser = "Cashflow Settlement Report for RecordParser.csv";
 
             using var reader = Sep.Reader(o => o with { Unescape = true }).FromFile(filePathForSep);
 
@@ -45,6 +33,10 @@ namespace Test_CSV_Parse
                     ConsoleWriteLine(item);
                 }
             }
+
+            #region benchmark
+            //BenchmarkRunner.Run<Benchmark>();
+            #endregion benchmark
 
             #region test sep different versions of parse methods
 
@@ -123,6 +115,32 @@ namespace Test_CSV_Parse
                     accumulator.Clear();
                 }
             }
+        }
+
+        private static StandardExcelRow MapRow(SepReader.Row row)
+        {
+            return new StandardExcelRow
+            {
+                RowNo = row["Row No"].Parse<int>(),
+                DetailNo = row["Detail No"].TryParse<int>(),
+                SchemeTransactionID = row["Scheme Transaction ID"].ToString(),
+                CustomField1 = row["Custom Field 1"].ToString(),
+                TradeDate = row["Trade Date"].TryParse<DateOnly>(),
+                FXMPTradeID = row["FXMP Trade ID"].ToString(),
+                NatWestSchemeID = row["NatWest Scheme ID"].ToString(),
+                NatWestSchemeName = row["NatWest Scheme Name"].ToString(),
+                GFXCounterparty = row["GFX Counterparty"].ToString(),
+                ValueDate = row["Value Date"].TryParse<DateOnly>(),
+                CCY = row["CCY"].ToString(),
+                Amount = row["Amount"].Parse<decimal>(),
+                Rate = row["Rate"].TryParse<decimal>(out var rate) ? rate : null,
+                PaymentDirection = row["Payment Direction"].ToString(),
+                DealType = row["Deal Type"].ToString(),
+                RBSReceiptDate = row["NatWest Receipt Date"].TryParse<DateOnly>(),
+                //SubmittedCashflowID = row["Submitted Cashflow ID"].ToString(),
+                Submitted = row["Submitted"].TryParse<DateTime>(),
+                RBSPaymentRef = row["NatWest Internal Booking Ref"].ToString()
+            };
         }
 
 
@@ -269,33 +287,6 @@ namespace Test_CSV_Parse
 
                 //Console.WriteLine();
             }
-        }
-
-
-        private static StandardExcelRow MapRow(SepReader.Row row)
-        {
-            return new StandardExcelRow
-            {
-                RowNo = row["Row No"].Parse<int>(),
-                DetailNo = row["Detail No"].TryParse<int>(),
-                SchemeTransactionID = row["Scheme Transaction ID"].ToString(),
-                CustomField1 = row["Custom Field 1"].ToString(),
-                TradeDate = row["Trade Date"].TryParse<DateOnly>(),
-                FXMPTradeID = row["FXMP Trade ID"].ToString(),
-                NatWestSchemeID = row["NatWest Scheme ID"].ToString(),
-                NatWestSchemeName = row["NatWest Scheme Name"].ToString(),
-                GFXCounterparty = row["GFX Counterparty"].ToString(),
-                ValueDate = row["Value Date"].TryParse<DateOnly>(),
-                CCY = row["CCY"].ToString(),
-                Amount = row["Amount"].Parse<decimal>(),
-                Rate = row["Rate"].TryParse<decimal>(out var rate) ? rate : null,
-                PaymentDirection = row["Payment Direction"].ToString(),
-                DealType = row["Deal Type"].ToString(),
-                RBSReceiptDate = row["NatWest Receipt Date"].TryParse<DateOnly>(),
-                //SubmittedCashflowID = row["Submitted Cashflow ID"].ToString(),
-                Submitted = row["Submitted"].TryParse<DateTime>(),
-                RBSPaymentRef = row["NatWest Internal Booking Ref"].ToString()
-            };
         }
 
         #endregion sep methods
